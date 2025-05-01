@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Email Header Analyzer</title>
+    <link rel="stylesheet" href="/static/style.css" />
+    <link href="/static/flag-sprites.min.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="/static/imgs/fav.png">
+  </head>
+  <body>
+    <div class="container">
+        <h1>Email Header Analyzer</h1>
+      {% if data %}
+      <div class="well well-lg">
+        <table style="padding-top: 50px;text-align: left;">
+            <tr>
+                <th style="width: 25%">Subject: </th>
+                <td>{{ summary.Subject }}</td>
+            </tr>
+            <tr>
+                <th>Delivery Information:</th>
+                <td>
+                    SPF: 
+                    <span {% if spf_result == 'pass' %}style="color: #00b300;"{% elif spf_result == 'neutral' %}style="color: orange;"{% elif spf_result == 'softfail' or spf_result == 'fail' %}style="color: red;"{% endif %}>
+                        {{ spf_result }}
+                    </span>
+                    <br/>
+                    DKIM: 
+                    <span {% if dkim_result == 'pass' %}style="color: #00b300;"{% elif dkim_result == 'fail' or dkim_result == 'Missing' %}style="color: red;"{% endif %}>
+                        {{ dkim_result }}
+                    </span>
+                    <br/>
+                    DMARC: 
+                    <span {% if dmarc_result == 'pass' %}style="color: #00b300;"{% elif dmarc_result == 'quarantine' %}style="color: red;"{% else %}style="color: red;"{% endif %}>
+                        {{ dmarc_result }}
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>Data Leaks:</th>
+                <td><a href="/emailosint" method="GET">Check Data Breaches</a>
+                    <!-- {% if intelx_results %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Records</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for result in intelx_results %}
+                            <tr>
+                                <td>{{ result.email }}</td>
+                                <td>
+                                    {% if result.records %}
+                                    <ul>
+                                        {% for record in result.records %}
+                                        <li>{{ record }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                    {% else %}
+                                    No records found
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %} -->
+                </td>
+            </tr>                                                             
+            <tr>
+                <th>Spoof Detector:</th>
+                <td {% if isSpoofed == 'Email may be spoofed' %}style="color: red;"{% elif isSpoofed == 'Email may not be spoofed' %}style="color: #00b300;"{% endif %}>{{ isSpoofed }}</td>
+            </tr>
+            <tr>
+                <th>Spam Score:</th>
+                <td>The spam score is: <b>{{ score }}</b></td>
+            </tr>
+            <tr>
+                <th>Email Recon:</th>
+                <td>{% if holehe_results %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Email Address</th>
+                                <th>Accounts on the following websites:</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for result in holehe_results %}
+                                <tr>
+                                    <td>{{ result.email }}</td>
+                                    <td>{{ result.website }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No results found.</p>
+                {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th style="width: 25%">Creation Time (Date): </th>
+                <td>{{ summary.Date }}</td>
+            </tr>
+            <tr>
+                <th style="width: 25%">From: </th>
+                <td>{{ summary.From }}</td>
+            </tr>
+            <tr>
+                <th style="width: 25%">To: </th>
+                <td>{{ summary.To }}</td>
+            </tr>
+            {% if summary.Cc %}
+            <tr>
+                <th style="width: 25%">Cc: </th>
+                <td>{{ summary.Cc }}</td>
+            </tr>
+            {% endif %}
+        </table>
+        <br/>
+        <br/>
+        </div>
+        <table class="table" id="table" data-toggle="table" data-search="true" data-show-columns="true" data-striped="true"
+            data-show-toggle="true" data-show-refresh="true" data-page-size="13" data-sort-name="hop"
+            data-sort-order="asc">
+            <thead style="background-color: #333333;color:#d4d4d4;">
+                <tr>
+                    <th data-field="hop" data-sortable="true">Hop</th>
+                    <th data-sortable="true">From</th>
+                    <th data-sortable="true">By</th>
+                    <th data-sortable="true">With</th>
+                    <th data-sortable="true">Time (UTC)</th>
+                    <th data-sortable="true">Delay</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for k, v in data.items() %}
+                <tr>
+                    <td>{{ k }}</td>
+                    <td>{{ v.Direction.0 }}{% if country(v.Direction.0).iso_code %}<span class="pull-right"><a href="#"
+                                data-toggle="tooltip" data-placement="top"
+                                title="{{country(v.Direction.0).country_name}}"><i
+                                    class="flag flag-{{country(v.Direction.0).iso_code}}"></i></a></span>{% endif %}
+                    </td>
+                    <td>{{ v.Direction.1 }}{% if country(v.Direction.1).iso_code %}<span class="pull-right"><a href="#"
+                                data-toggle="tooltip" data-placement="top"
+                                title="{{country(v.Direction.1).country_name}}"><i
+                                    class="flag flag-{{country(v.Direction.1).iso_code}}"></i></a></span>{% endif %}
+                    </td>
+                    <td>{{ v.Direction.2 }}</td>
+                    <td>{{ v.Time }}</td>
+                    <td>
+                        {% if duration(v.Delay) %} {{ duration(v.Delay) }} {% else %} {% if loop.first %} *
+                        {% else %}0{% endif %} {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br/>
+        <br/>
+        {% if delayed %}
+        <div>
+            {# <div id="chart_div"></div>#}
+            {{ chart|safe }}
+        </div>
+        {% endif %}
+        <div class="panel panel-default" style="margin-top: 10px;">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <h3 class="panel-title">Security Headers</h3>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    {% for k,v in n.items() %}
+                    {% if k in security_headers %}
+                    <tr>
+                        <th>{{ k }}</th>
+                        <td>{{ v }}</td>
+                    </tr>
+                    {% endif %} {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="panel panel-default" style="margin-top: 10px;">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <h3 class="panel-title">X- headers</h3>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    {% for k,v in n.items() %}
+                    {% if k.startswith('X-') %}
+                    <tr>
+                        <th>{{ k }}</th>
+                        <td>{{ v }}</td>
+                    </tr>
+                    {% endif %} {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="panel panel-default" style="margin-top: 10px;">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <h3 class="panel-title">Other headers</h3>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    {% for k,v in n.items() %}
+                    {% if k not in ['Received','Subject','From','To','Message-ID','CC','Date'] and k not in security_headers and not k.startswith('X-') %}
+                    <tr>
+                        <th>{{ k }}</th>
+                        <td>{{ v }}</td>
+                    </tr>
+                    {% endif %} {% endfor %}
+                </table>
+            </div>
+        </div>
+        <br/>
+        <button onclick="printToPDF()">Download PDF</button>
+
+            <script>
+            function printToPDF() {
+            window.print();
+            }
+            </script>
+        <br/>
+        <br/>
+        <a href="/logout" method="POST">Logout</a>
+       {% else %}
+        <div class="row">
+            <form method="POST">
+              <div class="form-group">
+                <textarea
+                  name="headers"
+                  class="form-control"
+                  rows="25"
+                  placeholder="Paste the header in here."
+                  autofocus
+                  required
+                ></textarea>
+              </div>
+              <button class="button" type="submit">
+                Analyze This!
+              </button>
+              <br/>
+              <br/>
+              <a href="/logout" method="POST">Logout</a>
+            </form>
+          </div>
+        </div>
+      {% endif %}
+   </div>
+  </body>
+</html>

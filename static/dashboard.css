@@ -1,0 +1,125 @@
+/* Reset the default margin and padding */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* Use a variable for the primary color */
+:root {
+  --primary-color: #22a7f0;
+}
+
+/* Set the font family and text color */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  background-color: #f2f2f2;
+}
+h1 {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+/* Center the containers horizontally and vertically */
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Add a hover effect to the container boxes */
+.container-box:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Style the container boxes */
+.container-box {
+  text-align: center;
+  margin: 50px 20px 30px;
+  width: 400px;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+/* Style the container box headings */
+.container-box h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+/* Style the container box paragraphs */
+.container-box p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  opacity: 0.7;
+}
+
+/* Style the buttons inside the container boxes */
+.button {
+  background-color: var(--primary-color);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-top: 20px;
+  cursor: pointer;
+  border-radius: 25px;
+  transition: all 0.2s ease-in-out;
+}
+
+/* On hover, change the background color of the buttons */
+.button:hover {
+  background-color: #1b8ab6;
+}
+
+/* Style the logout button */
+.logout {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.logout a {
+  background-color: var(--primary-color);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 25px;
+  transition: all 0.2s ease-in-out;
+}
+
+/* On hover, change the background color of the logout button */
+.logout a:hover {
+  background-color: #1b8ab6;
+}
+
+/* Style the wrapper div */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Style the container div */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}

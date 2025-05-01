@@ -1,0 +1,16 @@
+IPy
+argparse
+beautifulsoup4
+geoip2
+Flask
+Flask-Login
+holehe
+httpx
+python-dateutil
+intelxapi
+pygal
+requests
+spamcheck
+termcolor
+tqdm
+trio

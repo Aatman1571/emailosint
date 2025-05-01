@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Email Investigation Tool</title>
+  <link rel="stylesheet" href="/static/dashboard.css">
+</head>
+<body>
+    <h1>Welcome to EMAIL INVESTIGATION TOOL,  {{ session['name'] }}</h1>
+  <div class="container">
+    <!-- First container for Email Header Analyzer tool -->
+    <div class="container-box">
+      <h2>Email Header Analyzer</h2>
+      <p>Email Header Analyzer is a tool used to extract and analyze email headers, which contain important information about the source, route, and content of an email message.</p>
+      <button class="button" onclick="window.location.href='/index'">Go to tool</button>
+    </div>
+
+    <!-- Second container for Email OSINT tool -->
+    <div class="container-box">
+      <h2>Email OSINT</h2>
+      <p>Email OSINT is a tool that enables users to search for email addresses across multiple websites, and it also checks for any data breaches associated with the email ID on Intelligence X.</p>
+      <button class="button" onclick="window.location.href='/emailosint'">Go to tool</button>
+    </div>
+  </div>
+
+  <!-- Logout button at the center of the page below both containers -->
+  <div class="logout">
+    <a href="/logout">Logout</a>
+  </div>
+</body>
+</html>

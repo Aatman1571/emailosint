@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Email OSINT</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+	{% if not intelx_results and not holehe_results %}
+	    <h1>Email OSINT</h1>
+	    <form action="/emailosint" method="POST">
+		    <label for="email">Email Address:</label>
+		    <input type="email" id="email" name="email" required>
+		    <br/>
+	        <br/>
+		    <input type="submit" value="Analyze">
+	    </form>
+        <a href="/logout" method="POST">Logout</a>
+    {% endif %}
+    
+    {% if intelx_results %}
+    <h1>Email OSINT</h1>
+        <table>
+            <tr>
+                <th colspan="2">Data Leaks:</th>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <th>Records</th>
+            </tr>
+            {% for result in intelx_results %}
+            <tr>
+                <td>{{ result.email }}</td>
+                <td>
+                    {% if result.records %}
+                    <ul>
+                        {% for record in result.records %}
+                        <li>{{ record }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    No records found
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    
+    {% if holehe_results %}
+    <br/>
+        <table>
+           <h4>Email Recon:</h4>
+            <tr>
+                <th>Email</th>
+                <th>Website</th>
+            </tr>
+            {% for result in holehe_results %}
+            <tr>
+                <td>{{ result.email }}</td>
+                <td>{{ result.website }}</td>
+            </tr>
+            {% endfor %}       
+        </table>
+        <br/>
+        <button onclick="printToPDF()">Download PDF</button>
+
+            <script>
+            function printToPDF() {
+            window.print();
+            }
+            </script>
+        <br/>
+        <br/>
+        <a href="/logout" method="POST">Logout</a>
+    {% endif %}
+    </div>
+</body>
+</html>
