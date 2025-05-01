@@ -230,7 +230,7 @@ def utility_processor():
     return dict(duration=duration)
 
 def spamcheck(mail_data):
-    api_key = 'f2783038-950f-4f61-a05c-4bc222f4d91b'
+    api_key = 'YOUR_API_KEY'
     url = 'https://spamcheck.postmarkapp.com/filter'
 
     # Get the email content from the request
