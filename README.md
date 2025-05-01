@@ -1,3 +1,9 @@
+
+
+
+https://github.com/user-attachments/assets/da4fa8c7-16bf-4b13-b44d-d18e92888b89
+
+
 # Email Investigation Tool
 
 **Email Investigation Tool** is a comprehensive and powerful solution designed to help individuals and organizations detect and prevent email-based threats. It integrates two main components:
