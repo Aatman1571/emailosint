@@ -111,7 +111,7 @@ def emailosint():
     
     if request.method == 'POST':
         email = request.form.get('email')
-        intelx_api_key = '42c6a36b-8e74-4498-9bb4-f001dc8f15e9'
+        intelx_api_key = 'YOUR_API_KEY'
         intelx_api = intelx(intelx_api_key)
         intelx_results = []
         results = intelx_api.search(email)
